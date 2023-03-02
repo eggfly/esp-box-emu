@@ -245,20 +245,13 @@ struct Cartridge {
 	uint8_t mirror; // mirroring mode
 	uint8_t battery_present; // battery present
 
-	Cartridge(const char* path, const char* SRAM_path) : initialized(false) {
-		FILE* fp = fopen(path, "rb");
-		if (fp == nullptr) {
-			std::cerr << "ERROR: failed to open ROM file!" << std::endl;
-			return;
-		}
-
+	Cartridge(uint8_t* romdata, const char* SRAM_path) : initialized(false) {
 		iNESHeader header;
-		size_t elems_read = fread(&header, sizeof(header), 1, fp);
-		if (elems_read != 1) {
-			std::cerr << "ERROR: failed to read ROM header!" << std::endl;
-			return;
-		}
-
+		size_t amount = 0;
+		int index = 0;
+		amount = sizeof(header);
+		memcpy(&header, &romdata[index], amount);
+		index += amount;
 		if (header.magic != INES_MAGIC) {
 			std::cerr << "ERROR: invalid .nes file!" << std::endl;
 			return;
@@ -278,20 +271,16 @@ struct Cartridge {
 		if ((header.ctrl1 & 4) == 4) {
 			trainer_present = true;
 			trainer = new uint8_t[512];
-			elems_read = fread(trainer, 512, 1, fp);
-			if (elems_read != 1) {
-				std::cerr << "ERROR: failed to read trainer!" << std::endl;
-				return;
-			}
+			amount = 512;
+			memcpy(trainer, &romdata[index], amount);
+			index += amount;
 		}
 
 		prg_size = static_cast<int>(header.num_prg) << 14;
 		PRG = new uint8_t[prg_size];
-		elems_read = fread(PRG, prg_size, 1, fp);
-		if (elems_read != 1) {
-			std::cerr << "ERROR: failed to read PRG-ROM!" << std::endl;
-			return;
-		}
+		amount = prg_size;
+		memcpy(PRG, &romdata[index], amount);
+		index += amount;
 
 		chr_size = static_cast<int>(header.num_chr) << 13;
 		if (chr_size == 0) {
@@ -301,14 +290,10 @@ struct Cartridge {
 		}
 		else {
 			CHR = new uint8_t[chr_size];
-			elems_read = fread(CHR, chr_size, 1, fp);
-			if (elems_read != 1) {
-				std::cerr << "ERROR: failed to read CHR-ROM!" << std::endl;
-				return;
-			}
+			amount = chr_size;
+			memcpy(CHR, &romdata[index], amount);
+			index += amount;
 		}
-
-		fclose(fp);
 
 		SRAM = new uint8_t[8192];
 
@@ -316,6 +301,8 @@ struct Cartridge {
 		if (battery_present) {
 			// try to read saved SRAM
 			std::cout << "Attempting to read previously saved SRAM..." << std::endl;
+			// TODO:
+			/*
 			fp = fopen(SRAM_path, "rb");
 			if (fp == nullptr || (fread(SRAM, 8192, 1, fp) != 1)) {
 				std::cout << "WARN: failed to open SRAM file!" << std::endl;
@@ -323,6 +310,7 @@ struct Cartridge {
 			else {
 				fclose(fp);
 			}
+			*/
 		}
 		initialized = true;
 	}
@@ -792,7 +780,7 @@ struct NES {
 	Mapper* mapper;
 	uint8_t* RAM;
 
-	NES(const char* path, const char* SRAM_path, uint16_t* front_buffer, uint16_t* back_buffer);
+	NES(uint8_t *romdata, const char* SRAM_path, uint16_t* front_buffer, uint16_t* back_buffer);
 };
 
 struct Instruction {
