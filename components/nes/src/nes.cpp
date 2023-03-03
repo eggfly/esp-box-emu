@@ -38,6 +38,7 @@ void set_nes_video_fill() {
 void init_nes(const std::string& rom_filename, uint8_t *romdata, size_t rom_data_size) {
   static bool initialized = false;
   if (!initialized) {
+    // convert their palette (from knes) from uint32 RGBA to uint16 rgb
     int num_p = sizeof(old_palette) / sizeof(uint32_t);
     new_palette = new uint16_t[num_p];
     for (int i=0; i<num_p; i++) {
@@ -46,7 +47,6 @@ void init_nes(const std::string& rom_filename, uint8_t *romdata, size_t rom_data
     }
     setPalette(new_palette);
     // TODO: update sram
-    // TODO: update how rom file is loaded
     std::string SRAM_path = rom_filename + ".srm";
     nes = new NES(romdata, SRAM_path.c_str(), (uint16_t*)get_frame_buffer0(), (uint16_t*)get_frame_buffer1());
     // setup audio (nes->apu->stream)
