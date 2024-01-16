@@ -1,20 +1,12 @@
 #pragma once
 
-#include "box_emu_hal.hpp"
-
-static const std::string battery_topic = "battery";
+#include "format.hpp"
 
 struct BatteryInfo {
   float voltage;
   float level;
   float charge_rate;
 };
-
-namespace hal {
-  void battery_init();
-  std::shared_ptr<espp::Max1704x> get_battery();
-} // namespace hal
-
 
 // for printing battery info using libfmt
 template <>

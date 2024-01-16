@@ -10,7 +10,7 @@
 #include "touchpad_input.hpp"
 #include "gt911.hpp"
 
-namespace box_hal {
+namespace box_3_hal {
 
 static constexpr std::string_view dev_kit = "ESP32-S3-BOX-3";
 
