@@ -95,6 +95,8 @@ void keypad_read(bool *up, bool *down, bool *left, bool *right, bool *enter, boo
 }
 
 void update_touchpad_input() {
+  // eggfly
+  return;
   // get the latest data from the device
   std::error_code ec;
   bool new_data = touch_driver->update(ec);
@@ -223,6 +225,8 @@ static void init_input_v1() {
 
 static std::atomic<bool> initialized = false;
 void hal::init_input() {
+  // eggfly
+  return;
   if (initialized) return;
   fmt::print("Initializing input subsystem\n");
   // probe the i2c bus for the mcp23x17 (which would be v0) or the aw9523 (which

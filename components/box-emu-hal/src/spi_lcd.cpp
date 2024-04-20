@@ -242,7 +242,6 @@ void hal::lcd_init() {
             .rotation = rotation,
             .software_rotation_enabled = true,
         });
-
     frame_buffer0 = (uint8_t*)heap_caps_malloc(frame_buffer_size, MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
     frame_buffer1 = (uint8_t*)heap_caps_malloc(frame_buffer_size, MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
     initialized = true;

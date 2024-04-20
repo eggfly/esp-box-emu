@@ -25,6 +25,8 @@ static void update_volume_output() {
 }
 
 void hal::set_muted(bool mute) {
+  // eggfly
+  return;
   muted_ = mute;
   update_volume_output();
 }
@@ -34,6 +36,8 @@ bool hal::is_muted() {
 }
 
 void hal::set_audio_volume(int percent) {
+  // eggfly
+  return;
   volume_ = percent;
   update_volume_output();
 }
@@ -200,6 +204,8 @@ static void init_mute_button(void) {
 
 static bool initialized = false;
 void hal::audio_init() {
+  // eggfly
+  return;
   if (initialized) return;
 
   /* Config power control IO */
@@ -246,6 +252,8 @@ void hal::audio_init() {
 }
 
 void hal::play_audio(const uint8_t *data, uint32_t num_bytes) {
+  // eggfly
+  return;
   size_t bytes_written = 0;
   auto err = ESP_OK;
   err = i2s_channel_write(tx_handle, data, num_bytes, &bytes_written, 1000);

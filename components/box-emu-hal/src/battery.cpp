@@ -9,6 +9,8 @@ static std::vector<espp::AdcConfig> channels;
 using namespace std::chrono_literals;
 
 void hal::battery_init() {
+  // eggfly
+  return;
   if (battery_initialized_) {
     return;
   }
